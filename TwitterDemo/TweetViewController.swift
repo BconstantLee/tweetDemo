@@ -19,6 +19,9 @@ class TweetViewController: UIViewController, UITableViewDataSource, UITableViewD
         tableView.dataSource = self
         tableView.delegate = self
         
+        tableView.estimatedRowHeight = 180
+        tableView.rowHeight = UITableViewAutomaticDimension
+        
         TwitterClient.sharedInstance!.homeTimeLine(success: { (tweets: [Tweet]) in
             self.tweets = tweets
             self.tableView.reloadData()
@@ -51,10 +54,21 @@ class TweetViewController: UIViewController, UITableViewDataSource, UITableViewD
         let tweet = tweets[indexPath.row]
         
         cell.nameLabel.text = tweet.name as String?
-//        let formatter = DateFormatter()
-//        formatter.dateFormat = "EEE MMM d HH:mm:ss Z y"
-//        let dateString = formatter.string(from:tweet.timestamp!)
-//        cell.timeLabel.text = dateString
+        cell.nameLabel.sizeToFit()
+        
+        cell.textField.text = tweet.text as String?
+        cell.textField.sizeToFit()
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "EEE MMM d y"
+        let dateString = formatter.string(from:tweet.timestamp!)
+        cell.timeLabel.text = dateString
+        cell.timeLabel.sizeToFit()
+        
+        if let profileUrl = tweet.profileImageUrl {
+            print("enter:\(profileUrl)")
+            cell.imageCell.setImageWith(profileUrl)
+        } else { cell.imageCell = nil }
         
         return cell
         

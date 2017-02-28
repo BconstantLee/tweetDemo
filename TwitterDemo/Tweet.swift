@@ -30,7 +30,7 @@ class Tweet: NSObject {
         
         let user: NSDictionary = (dictionary["user"] as? NSDictionary) ?? [:]
         if user.count > 0 {
-            if let profileImageUrlString = user["profile_image_url"] as? String {
+            if let profileImageUrlString = user["profile_image_url_https"] as? String {
                 profileImageUrl = URL(string: profileImageUrlString)
             }
             
