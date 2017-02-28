@@ -55,18 +55,31 @@ class TweetViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         cell.nameLabel.text = tweet.name as String?
         cell.nameLabel.sizeToFit()
+        cell.id = tweet.id
+        cell.favoriteCount = tweet.favoriteCount
+        cell.favoriteLabel.text = ("\(tweet.favoriteCount)")
+        cell.retweetCount = tweet.retweetCount
+        cell.retweetLabel.text = ("\(tweet.retweetCount)")
+        cell.isRetweeted = tweet.retweeted!
+        if tweet.retweeted! {
+            cell.retweetButton.setImage(UIImage(named: "retweet-icon-green"), for: .normal)
+        } else { cell.retweetButton.setImage(UIImage(named: "retweet-icon"), for: .normal) }
+        cell.isFavorited = tweet.favorited!
+        if tweet.favorited! {
+            
+            cell.favoriteButton.setImage(UIImage(named: "favor-icon"), for: .normal)
+        } else { cell.favoriteButton.setImage(UIImage(named: "favor-icon-1"), for: .normal) }
         
         cell.textField.text = tweet.text as String?
         cell.textField.sizeToFit()
         
         let formatter = DateFormatter()
-        formatter.dateFormat = "EEE MMM d y"
+        formatter.dateFormat = "EEE MMM d HH:mm y"
         let dateString = formatter.string(from:tweet.timestamp!)
         cell.timeLabel.text = dateString
         cell.timeLabel.sizeToFit()
         
         if let profileUrl = tweet.profileImageUrl {
-            print("enter:\(profileUrl)")
             cell.imageCell.setImageWith(profileUrl)
         } else { cell.imageCell = nil }
         

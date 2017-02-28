@@ -16,11 +16,19 @@ class Tweet: NSObject {
     var screeName: String?
     var name: String?
     var profileImageUrl: URL?
+    var retweeted: Bool? = false
+    var favorited: Bool? = false
+    var id: Int?
     
     init(dictionary: NSDictionary) {
         text = dictionary["text"] as? NSString
+        id = (dictionary["id"] as? Int) ?? 0
+        
+        retweeted = dictionary["retweeted"] as? Bool
         retweetCount = (dictionary["retweet_count"] as? Int) ?? 0
+        favorited = dictionary["favorited"] as? Bool
         favoriteCount = (dictionary["favourites_count"] as? Int) ?? 0
+        
         let timestampString = dictionary["created_at"] as? String
         if let timestampString = timestampString {
             let formatter = DateFormatter()
