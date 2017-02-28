@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import BDBOAuth1Manager
 
 class LoginViewController: UIViewController {
 
@@ -19,6 +20,16 @@ class LoginViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    @IBAction func onLoginButton(_ sender: AnyObject) {
+        
+        let client = TwitterClient.sharedInstance!
+        client.login(success: { 
+            self.performSegue(withIdentifier: "loginSegue", sender: nil)
+        }) { (error: Error) in
+                print("Error: \(error.localizedDescription)")
+        }
     }
     
 

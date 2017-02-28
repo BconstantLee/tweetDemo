@@ -8,17 +8,56 @@
 
 import UIKit
 
-class TweetViewController: UIViewController {
+class TweetViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
+    var tweets: [Tweet]!
+    @IBOutlet weak var tableView: UITableView!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        tableView.dataSource = self
+        tableView.delegate = self
+        
+        TwitterClient.sharedInstance!.homeTimeLine(success: { (tweets: [Tweet]) in
+            self.tweets = tweets
+            self.tableView.reloadData()
+//            for tweet in tweets {
+//                print("count")
+//                print("\(tweet.name!)")
+//            }
+        }, failure: { (error: Error) in
+            print("Error: \(error.localizedDescription)")
+        })
         // Do any additional setup after loading the view.
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if tweets != nil {
+            return tweets.count
+        } else {
+            return 0
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "tweetCell", for: indexPath) as! tweetCell
+        
+        let tweet = tweets[indexPath.row]
+        
+        cell.nameLabel.text = tweet.name as String?
+//        let formatter = DateFormatter()
+//        formatter.dateFormat = "EEE MMM d HH:mm:ss Z y"
+//        let dateString = formatter.string(from:tweet.timestamp!)
+//        cell.timeLabel.text = dateString
+        
+        return cell
+        
     }
     
 
