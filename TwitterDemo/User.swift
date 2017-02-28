@@ -9,6 +9,7 @@
 import UIKit
 
 class User: NSObject {
+    static let userDidLogoutNotification = NSNotification.Name(rawValue: "UserDidLogout")
     var name: NSString?
     var screenname: NSString?
     var profileUrl: NSURL?
@@ -36,11 +37,8 @@ class User: NSObject {
                 let defaults = UserDefaults.standard
                 let userData = defaults.object(forKey: "currentUserData") as? Data
                 if let userData = userData {
-                    print("User1")
                     if let dictionary = try? JSONSerialization.jsonObject(with: userData, options: []) as! NSDictionary {
-                        print("User2")
                         _currentUser = User(dictionary: dictionary)
-                        print("User3")
                     }
                 }
             }
@@ -54,9 +52,7 @@ class User: NSObject {
             if let user = user {
                 print(user.dictionary)
                 if let data = try? JSONSerialization.data(withJSONObject: user.dictionary!, options: []) {
-                    print("User5")
                     defaults.set(data, forKey: "currentUserData")
-                    print("User6")
                 }
             } else {
                 defaults.set(nil, forKey: "currentUserData")
