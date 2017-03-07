@@ -9,7 +9,7 @@
 import UIKit
 
 class Tweet: NSObject {
-    var text: NSString?
+    var text: String?
     var timestamp: Date?
     var retweetCount: Int = 0
     var favoriteCount: Int = 0
@@ -19,15 +19,21 @@ class Tweet: NSObject {
     var retweeted: Bool? = false
     var favorited: Bool? = false
     var id: Int?
+    var followed: Bool? = false
+    var user: User!
     
     init(dictionary: NSDictionary) {
-        text = dictionary["text"] as? NSString
+        text = dictionary["text"] as? String
+//        print("text:\(text)\n")
         id = (dictionary["id"] as? Int) ?? 0
         
         retweeted = dictionary["retweeted"] as? Bool
         retweetCount = (dictionary["retweet_count"] as? Int) ?? 0
         favorited = dictionary["favorited"] as? Bool
-        favoriteCount = (dictionary["favourites_count"] as? Int) ?? 0
+        favoriteCount = (dictionary["favorite_count"] as? Int) ?? 0
+//        followed = dictionary["following"] as? Bool
+//        print("fcount: \(dictionary["favorite_count"])")
+//        print("fol: \(followed)")
         
         let timestampString = dictionary["created_at"] as? String
         if let timestampString = timestampString {
@@ -36,15 +42,19 @@ class Tweet: NSObject {
             timestamp = formatter.date(from: timestampString)
         }
         
-        let user: NSDictionary = (dictionary["user"] as? NSDictionary) ?? [:]
-        if user.count > 0 {
-            if let profileImageUrlString = user["profile_image_url_https"] as? String {
+        let userDic: NSDictionary = (dictionary["user"] as? NSDictionary) ?? [:]
+        user = User(dictionary: userDic)
+        if userDic.count > 0 {
+            if let profileImageUrlString = userDic["profile_image_url_https"] as? String {
                 profileImageUrl = URL(string: profileImageUrlString)
             }
-            
-            screeName = user["screen_name"] as? String
-            
-            name = user["name"] as? String
+//            print("user:\(user["statuses_count"])")
+//            print("user:\(user["friends_count"])")
+//            print("user:\(user["followers_count"])")
+//            screeName = userDic["screen_name"] as? String
+            screeName = user.screenname!
+//            name = userDic["name"] as? String
+            name = user.name!
         }
     }
     
@@ -52,6 +62,7 @@ class Tweet: NSObject {
         var tweets = [Tweet]()
         
         for dictionary in dictionaries {
+//            print("bcount: \(dictionary["favorite_count"])")
             let tweet = Tweet(dictionary: dictionary)
             tweets.append(tweet)
         }

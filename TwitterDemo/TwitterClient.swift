@@ -10,7 +10,7 @@ import UIKit
 import BDBOAuth1Manager
 
 class TwitterClient: BDBOAuth1SessionManager {
-    static let sharedInstance = TwitterClient(baseURL: NSURL(string: "https://api.twitter.com") as URL!, consumerKey: "voJzgjvuS2VCaUALl14PRbXgj", consumerSecret: "ydIcYOpvevVCCHG8415vp4SZgxglyUePu6izs2GGb4AxCyPRqD")
+    static let sharedInstance = TwitterClient(baseURL: NSURL(string: "https://api.twitter.com") as URL!, consumerKey: "pj4H9bEPl4QcvZmJ9hyUf9iq3", consumerSecret: "Nbr8UiZNDKu8iSE5IjhHvq758jZpEbuEaa4SijJ2JbhUIPimLF")
     
     var loginSuccess: (() -> ())?
     var loginFailure: ((Error) -> ())?
@@ -18,6 +18,9 @@ class TwitterClient: BDBOAuth1SessionManager {
     func homeTimeLine(success: @escaping ([Tweet]) -> (), failure: @escaping (Error) -> ()) {
         get("1.1/statuses/home_timeline.json", parameters: nil, progress: nil, success: { (task: URLSessionDataTask, response: Any?) in
             let dictionaries = response as! [NSDictionary]
+//            for dictionary in dictionaries {
+//                print("text:\(dictionary["text"])\n")
+//            }
             let tweets = Tweet.tweetsWithArray(dictionaries: dictionaries)
             
             success(tweets)
@@ -105,6 +108,10 @@ class TwitterClient: BDBOAuth1SessionManager {
         }) { (task: URLSessionDataTask?, error: Error) in
             failure(error)
         }
+    }
+    
+    func compose() {
+        
     }
     
     func handleOpenUrl(url: URL) {

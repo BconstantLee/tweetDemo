@@ -26,12 +26,24 @@ class tweetCell: UITableViewCell {
     var isRetweeted = false
     var retweetCount: Int! = 0
     var favoriteCount: Int! = 0
+    var user: User!
+    var rootView: TweetViewController!
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onImage))
+        imageCell.isUserInteractionEnabled = true
+        imageCell.addGestureRecognizer(tapGesture)
     }
 
+    func onImage() {
+        print("Tap on image")
+        rootView.selectedUser = user
+        rootView.performSegue(withIdentifier: "selfSegue", sender: rootView)
+        rootView.selectedUser = User.currentUser!
+    }
+    
     func retweet() {
         isRetweeted = true
         retweetButton.setImage(UIImage(named: "retweet-icon-green"), for: .normal)
@@ -48,14 +60,14 @@ class tweetCell: UITableViewCell {
     
     func favorite() {
         isFavorited = true
-        favoriteButton.setImage(UIImage(named: "favor-icon"), for: .normal)
+        favoriteButton.setImage(UIImage(named: "favor-icon-red"), for: .normal)
         favoriteCount = favoriteCount + 1
         favoriteLabel.text = "\(favoriteCount!)"
     }
     
     func unfavorite() {
         isFavorited = false
-        favoriteButton.setImage(UIImage(named: "favor-icon-1"), for: .normal)
+        favoriteButton.setImage(UIImage(named: "favor-icon"), for: .normal)
         favoriteCount = favoriteCount - 1
         favoriteLabel.text = "\(favoriteCount!)"
     }
@@ -98,7 +110,7 @@ class tweetCell: UITableViewCell {
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
+//        super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
     }
