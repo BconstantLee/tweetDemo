@@ -66,9 +66,9 @@ class detailViewController: UIViewController {
         retweetButton.titleLabel?.sizeToFit()
         
         if (isFavorited) {
-            favoButton.setImage(UIImage(named: "favor-icon"), for: .normal)
-        } else {
             favoButton.setImage(UIImage(named: "favor-icon-red"), for: .normal)
+        } else {
+            favoButton.setImage(UIImage(named: "favor-icon"), for: .normal)
         }
         favoButton.setTitle("\(favoriteCount!)", for: .normal)
         favoButton.titleLabel?.sizeToFit()
@@ -168,7 +168,8 @@ class detailViewController: UIViewController {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         if segue.identifier == "replySegue" {
-            let destination = segue.destination as! composeViewController
+            let navController = segue.destination as! UINavigationController
+            let destination = navController.topViewController as! composeViewController
             destination.replyTo = "@\(tweet.screeName!)"
         }
     }

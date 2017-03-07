@@ -110,8 +110,28 @@ class TwitterClient: BDBOAuth1SessionManager {
         }
     }
     
-    func compose() {
-        
+    func compose(status: String, success: @escaping (NSDictionary) -> (), failure: @escaping (Error) -> ()) {
+        post("1.1/statuses/update.json", parameters: ["status": status], progress: nil, success: { (task: URLSessionDataTask, response: Any?) in
+            if let response = response {
+                let tweet = response as! NSDictionary
+                success(tweet)
+            }
+            
+        }) { (task: URLSessionDataTask?, error: Error) in
+            failure(error)
+        }
+    }
+    
+    func reply(status: String, id: Int, success: @escaping (NSDictionary) -> (), failure: @escaping (Error) -> ()) {
+        post("1.1/statuses/update.json", parameters: ["status": status, "in_reply_to_status_id": id], progress: nil, success: { (task: URLSessionDataTask, response: Any?) in
+            if let response = response {
+                let tweet = response as! NSDictionary
+                success(tweet)
+            }
+            
+        }) { (task: URLSessionDataTask?, error: Error) in
+            failure(error)
+        }
     }
     
     func handleOpenUrl(url: URL) {

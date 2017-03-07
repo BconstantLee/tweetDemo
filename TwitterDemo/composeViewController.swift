@@ -19,6 +19,7 @@ class composeViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         textField.delegate = self
         textField.text = replyTo
+        avatarImage.setImageWith(User.currentUser!.profileUrl!)
         // Do any additional setup after loading the view.
     }
     
@@ -28,8 +29,13 @@ class composeViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func onSubmit(_ sender: AnyObject) {
-        self.replyTo = ""
-        dismiss(animated: true, completion: nil)
+        
+        TwitterClient.sharedInstance?.compose(status: textField.text!, success: { (NSDictionary) in
+                self.replyTo = ""
+                self.dismiss(animated: true, completion: nil)
+            }, failure: { (error: Error) in
+                print("Error: \(error.localizedDescription)")
+        })
     }
 //    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange,
 //                   replacementString string: String) -> Bool

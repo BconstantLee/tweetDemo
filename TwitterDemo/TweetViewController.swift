@@ -145,7 +145,8 @@ class TweetViewController: UIViewController, UITableViewDataSource, UITableViewD
 //            let user = User.currentUser!
             destination.user = user
         } else if segue.identifier == "composeSegue" {
-            let destination = segue.destination as! composeViewController
+            let navController = segue.destination as! UINavigationController
+            let destination = navController.topViewController as! composeViewController
             destination.replyTo = ""
         }
     }
